@@ -5,16 +5,13 @@ int main (int argc, const char * argv[]) {
 	
 	NSFileManager *manager = [NSFileManager defaultManager];
 	NSString *home = [@"~" stringByExpandingTildeInPath];
-	NSDirectoryEnumerator *direnum = [manager enumeratorAtPath:home];
 	NSMutableArray *files = [NSMutableArray array];
-	NSString *filename;
-	while (filename = [direnum nextObject]) {
+	for (NSString *filename in [manager enumeratorAtPath:home]) {
 		if ([[filename pathExtension] isEqualTo:@"jpg"]) {
 			[files addObject:filename];
 		}
 	}
-	NSEnumerator *fileenum = [files objectEnumerator];
-	while (filename = [fileenum nextObject]) {
+	for (NSString *filename in files) {
 		NSLog(@"%@", filename);
 	}
 	NSLog(@"There are %d JPEG files in the Home Directory", [files count]); 
