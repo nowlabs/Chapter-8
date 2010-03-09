@@ -2,25 +2,22 @@
 
 int main (int argc, const char * argv[]) {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	NSArray *array = 
-	[NSArray arrayWithObjects:@"one", @"two", @"three", nil];
-	for (int i = 0; i < [array count]; i++) {
-		NSLog(@"index %d has %@", i, [array objectAtIndex:i]);
+	
+	NSFileManager *manager = [NSFileManager defaultManager];
+	NSString *home = [@"~" stringByExpandingTildeInPath];
+	NSDirectoryEnumerator *direnum = [manager enumeratorAtPath:home];
+	NSMutableArray *files = [NSMutableArray array];
+	NSString *filename;
+	while (filename = [direnum nextObject]) {
+		if ([[filename pathExtension] isEqualTo:@"jpg"]) {
+			[files addObject:filename];
+		}
 	}
-	//id noObject = [array objectAtIndex:28000]; /* Global breakpoint testing */
-	
-	NSNumber *number = [NSNumber numberWithInt:42];
-	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-	[dictionary setValue:number forKey:@"Bork"];
-	NSLog(@"Key: %@, Value: %d", @"Bork", [[dictionary valueForKey:@"Bork"] intValue]);
-	
-	NSMutableArray *marray = [NSMutableArray array];
-	NSRect rect = NSMakeRect(2, 4, 30, 40);
-	NSValue *value = [NSValue valueWithRect:rect];
-	[marray addObject:value];
-	value = [marray objectAtIndex:0];
-	NSRect anotherrect = [value rectValue]; 
-	NSLog(@"Origin of Rectangle is: %f", anotherrect.origin.x);
+	NSEnumerator *fileenum = [files objectEnumerator];
+	while (filename = [fileenum nextObject]) {
+		NSLog(@"%@", filename);
+	}
+	NSLog(@"There are %d JPEG files in the Home Directory", [files count]); 
     [pool drain];
     return 0;
 }
